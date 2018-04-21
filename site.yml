@@ -1,12 +1,15 @@
 ---
 
 - hosts: all
-
+  tags:
+  - setup
   roles:
   - docker
 
 - hosts: front
   serial: 1
+  tags:
+  - front
 
   pre_tasks:  
   - name: Disable monitoring
