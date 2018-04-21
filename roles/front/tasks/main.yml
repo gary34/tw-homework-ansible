@@ -19,6 +19,6 @@
     volumes: 
       - "{{ ansible_user_dir }}/apps/{{ ts }}/dist:/usr/share/nginx/html:ro"
     ports:
-      - "80:80"
+      - "8999:80"
   become: yes
   become_method: sudo
