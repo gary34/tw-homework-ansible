@@ -1,0 +1,24 @@
+---
+
+- name: copy to server
+  copy: src="{{item}}" dest="{{ ansible_user_dir }}/apps/{{ ts }}/" mode=0644
+  with_fileglob: front*.tgz
+
+- name: unpacke application
+  shell: warn=False chdir="{{ ansible_user_dir }}/apps/{{ ts }}"  tar -xzf *.tgz ; rm -f *.tgz 
+
+- name: stop docker application
+  docker_container: state=absent name="{{ container_name }}"
+  become: yes
+  become_method: sudo
+
+- name: start docker application
+  docker_container: 
+    name: "{{ container_name }}"
+    image: nginx:alpine
+    volumes: 
+      - "{{ ansible_user_dir }}/apps/{{ ts }}/dist:/usr/share/nginx/html:ro"
+    ports:
+      - "80:80"
+  become: yes
+  become_method: sudo

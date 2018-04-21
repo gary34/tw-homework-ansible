@@ -1,0 +1,23 @@
+---
+
+- hosts: all
+
+  roles:
+  - docker
+
+- hosts: front
+  serial: 1
+
+  pre_tasks:  
+  - name: Disable monitoring
+    debug: 
+      msg: "will to disable monitoring..."
+  - name: remove server from cluster
+    debug:
+      msg: "remove server from cluster...."
+      
+  vars:
+    ts: '{{ ansible_date_time.iso8601_basic_short }}'
+    container_name: tw-front
+  roles:
+  - front

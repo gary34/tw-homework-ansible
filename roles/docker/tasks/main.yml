@@ -1,0 +1,65 @@
+---
+- name: check docker installed
+  command: dpkg -l docker
+  register: docker_contents
+  failed_when: no
+  changed_when: no
+
+- name: update apt
+  apt: 
+    update_cache: yes
+  become: yes
+  become_method: sudo
+  when: docker_contents.rc == 1
+
+- name: install depends
+  apt:
+    name: "{{item}}"
+    state: latest
+    install_recommends: no
+  with_items:
+    - apt-transport-https 
+    - ca-certificates
+    - curl
+    - software-properties-common
+  become: yes
+  become_method: sudo
+  when: docker_contents.rc == 1
+
+- name: Add Docker’s official GPG key
+  raw: curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+  when: docker_contents.rc == 1
+
+- name: Add-apt-repository
+  raw: add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+  when: docker_contents.rc == 1
+  become: yes
+  become_method: sudo
+
+- name: update apt after add repository
+  apt: 
+    update_cache: yes
+  become: yes
+  become_method: sudo
+  when: docker_contents.rc == 1
+
+- name: install docker
+  apt:
+    name: docker-ce
+    state: latest
+    install_recommends: no
+  when: docker_contents.rc == 1
+  become: yes
+  become_method: sudo
+
+- name: update pip
+  pip: state=latest name=pip
+  become: yes
+  become_method: sudo
+  when: docker_contents.rc == 1
+
+- name: install docker-py
+  pip: state=latest name=docker-py
+  become: yes
+  become_method: sudo
+  when: docker_contents.rc == 1
