@@ -25,4 +25,4 @@
   become_method: sudo
 
 - name: clean old release
-  command: "find {{app_path}} -maxdepth 1  -mindepth 1 -type d -ctime +3 -exec rm -rf {} \;"
+  command: 'find {{app_path}} -maxdepth 1  -mindepth 1 -type d -ctime +3 -exec rm -rf {} \'
