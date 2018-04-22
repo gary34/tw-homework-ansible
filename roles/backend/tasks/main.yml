@@ -18,7 +18,7 @@
     image: java:8-jre-alpine
     entrypoint: java -jar /app/backend-*.jar
     volumes: 
-      - "{{app_path}}/{{ ts }}/dist:/app"
+      - "{{app_path}}/{{ ts }}:/app"
     ports:
       - "9000:9000"
   become: yes
