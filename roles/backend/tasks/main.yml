@@ -2,7 +2,7 @@
 
 - name: copy to server
   copy: src="{{item}}" dest="{{app_path}}/{{ ts }}/" mode=0644
-  with_fileglob: front*.tgz
+  with_fileglob: backend*.jar
 
 - name: unpacke application
   shell: warn=False chdir="{{app_path}}/{{ ts }}"  tar -xzf *.tgz ; rm -f *.tgz 
@@ -15,11 +15,12 @@
 - name: start docker application
   docker_container: 
     name: "{{ container_name }}"
-    image: nginx:alpine
+    image: java:8-jre-alpine
+    entrypoint: java -jar /app/backend-*.jar
     volumes: 
-      - "{{app_path}}/{{ ts }}/dist:/usr/share/nginx/html:ro"
+      - "{{app_path}}/{{ ts }}/dist:/app"
     ports:
-      - "8999:80"
+      - "9000:9000"
   become: yes
   become_method: sudo
 

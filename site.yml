@@ -22,5 +22,27 @@
   vars:
     ts: '{{ ansible_date_time.iso8601_basic_short }}'
     container_name: tw-front
+    app_path: '{{ ansible_user_dir }}/apps/front'
   roles:
   - front
+
+
+- hosts: backend
+  serial: 1
+  tags:
+  - backend
+
+  pre_tasks:  
+  - name: Disable monitoring
+    debug: 
+      msg: "will to disable monitoring..."
+  - name: remove server from cluster
+    debug:
+      msg: "remove server from cluster...."
+      
+  vars:
+    ts: '{{ ansible_date_time.iso8601_basic_short }}'
+    container_name: tw-backend
+    app_path: '{{ ansible_user_dir }}/apps/backend'
+  roles:
+  - backend
