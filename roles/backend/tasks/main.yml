@@ -1,11 +1,8 @@
 ---
 
 - name: copy to server
-  copy: src="{{item}}" dest="{{app_path}}/{{ ts }}/" mode=0644
-  with_fileglob: backend*.jar
+  copy: src=backend.jar dest="{{app_path}}/{{ ts }}/" mode=0644
 
-- name: unpacke application
-  shell: warn=False chdir="{{app_path}}/{{ ts }}"  tar -xzf *.tgz ; rm -f *.tgz 
 
 - name: stop docker application
   docker_container: state=absent name="{{ container_name }}"
@@ -16,7 +13,7 @@
   docker_container: 
     name: "{{ container_name }}"
     image: java:8-jre-alpine
-    entrypoint: java -jar /app/backend-*.jar
+    entrypoint: java -jar /app/backend.jar
     volumes: 
       - "{{app_path}}/{{ ts }}:/app"
     ports:
