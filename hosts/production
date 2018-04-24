@@ -1,9 +1,9 @@
 [front]
-172.18.210.255
 172.18.210.254
+172.18.211.0
 [backend]
 172.18.210.255
-172.18.210.254
+172.18.211.0
 [all:vars]
 ansible_user = 'ubuntu'
 ansible_ssh_private_key_file = id_rsa-ansible
